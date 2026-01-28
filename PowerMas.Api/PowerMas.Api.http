@@ -1,6 +1,119 @@
-@PowerMas.Api_HostAddress = http://localhost:5005
+@baseUrl = https://localhost:7001/api
 
-GET {{PowerMas.Api_HostAddress}}/weatherforecast/
+### ===== DOCUMENTOS DE IDENTIDAD =====
+
+### Listar documentos de identidad activos (para dropdown)
+GET {{baseUrl}}/documentos-identidad/activos
 Accept: application/json
 
-###
+### ===== BENEFICIARIOS =====
+
+### Listar todos los beneficiarios
+GET {{baseUrl}}/beneficiarios
+Accept: application/json
+
+### Obtener beneficiario por Id
+GET {{baseUrl}}/beneficiarios/1
+Accept: application/json
+
+### Crear beneficiario (DNI Perú - 8 dígitos numéricos)
+POST {{baseUrl}}/beneficiarios
+Content-Type: application/json
+
+{
+  "nombres": "Juan Carlos",
+  "apellidos": "Pérez López",
+  "documentoIdentidadId": 1,
+  "numeroDocumento": "12345678",
+  "fechaNacimiento": "1990-05-15",
+  "sexo": "M"
+}
+
+### Crear beneficiario (CE Perú - 9 dígitos numéricos)
+POST {{baseUrl}}/beneficiarios
+Content-Type: application/json
+
+{
+  "nombres": "María Elena",
+  "apellidos": "García Torres",
+  "documentoIdentidadId": 2,
+  "numeroDocumento": "123456789",
+  "fechaNacimiento": "1985-03-20",
+  "sexo": "F"
+}
+
+### Actualizar beneficiario
+PUT {{baseUrl}}/beneficiarios/1
+Content-Type: application/json
+
+{
+  "nombres": "Juan Carlos Actualizado",
+  "apellidos": "Pérez López",
+  "documentoIdentidadId": 1,
+  "numeroDocumento": "12345678",
+  "fechaNacimiento": "1990-05-15",
+  "sexo": "M"
+}
+
+### Eliminar beneficiario
+DELETE {{baseUrl}}/beneficiarios/1
+
+### ===== CASOS DE ERROR =====
+
+### Error 400: DocumentoIdentidadId no existe
+POST {{baseUrl}}/beneficiarios
+Content-Type: application/json
+
+{
+  "nombres": "Test",
+  "apellidos": "Test",
+  "documentoIdentidadId": 999,
+  "numeroDocumento": "12345678",
+  "fechaNacimiento": "1990-01-01",
+  "sexo": "M"
+}
+
+### Error 400: NumeroDocumento longitud incorrecta (DNI debe ser 8)
+POST {{baseUrl}}/beneficiarios
+Content-Type: application/json
+
+{
+  "nombres": "Test",
+  "apellidos": "Test",
+  "documentoIdentidadId": 1,
+  "numeroDocumento": "123",
+  "fechaNacimiento": "1990-01-01",
+  "sexo": "M"
+}
+
+### Error 400: NumeroDocumento debe ser solo números (DNI)
+POST {{baseUrl}}/beneficiarios
+Content-Type: application/json
+
+{
+  "nombres": "Test",
+  "apellidos": "Test",
+  "documentoIdentidadId": 1,
+  "numeroDocumento": "1234567A",
+  "fechaNacimiento": "1990-01-01",
+  "sexo": "M"
+}
+
+### Error 404: Beneficiario no existe (GET)
+GET {{baseUrl}}/beneficiarios/99999
+
+### Error 404: Beneficiario no existe (PUT)
+PUT {{baseUrl}}/beneficiarios/99999
+Content-Type: application/json
+
+{
+  "nombres": "Test",
+  "apellidos": "Test",
+  "documentoIdentidadId": 1,
+  "numeroDocumento": "12345678",
+  "fechaNacimiento": "1990-01-01",
+  "sexo": "M"
+}
+
+### Error 404: Beneficiario no existe (DELETE)
+DELETE {{baseUrl}}/beneficiarios/99999
